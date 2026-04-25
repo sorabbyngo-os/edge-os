@@ -1,0 +1,46 @@
+# Sorabbyngo Edge OS — ARM Minimal Kernel Configuration Fragment
+# Target: Raspberry Pi, drones, vehicles, IoT sensors
+
+# ARM64 target
+BR2_aarch64=y
+BR2_cortex_a72=y
+
+# Real-time for actuator control
+CONFIG_PREEMPT_RT=y
+CONFIG_HZ_1000=y
+
+# Minimal footprint — target < 50MB rootfs
+CONFIG_EMBEDDED=y
+CONFIG_EXPERT=y
+
+# CAN bus — vehicles, infusion pumps
+CONFIG_CAN=y
+CONFIG_CAN_RAW=y
+CONFIG_CAN_SOCKETCAN=y
+CONFIG_CAN_MCP251XFD=y
+
+# MAVLink / drone support
+CONFIG_USB_ACM=y
+CONFIG_USB_SERIAL=y
+CONFIG_USB_SERIAL_GENERIC=y
+
+# LoRa / radio mesh
+CONFIG_SPI=y
+CONFIG_SPI_BCM2835=y
+
+# GPIO for sensors
+CONFIG_GPIO_SYSFS=y
+CONFIG_GPIO_BCM2835=y
+
+# Minimal networking
+CONFIG_WIRELESS=y
+CONFIG_CFG80211=y
+CONFIG_MAC80211=y
+
+# Power management — battery devices
+CONFIG_POWER_SUPPLY=y
+CONFIG_BATTERY_SIMPLE_GPIO=y
+
+# Sorabbyngo modules
+CONFIG_SORABBYNGO_NODEID=m
+CONFIG_BYNGONET_IDENTITY=m

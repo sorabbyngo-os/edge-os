@@ -1,0 +1,40 @@
+#!/bin/sh
+# Sorabbyngo Edge OS init script
+# Starts core services in correct order
+
+case "$1" in
+    start)
+        echo "[edge-os] Starting Sorabbyngo services..."
+
+        # NodeID
+        modprobe sorabbyngo_nodeid 2>/dev/null || true
+        modprobe byngonet_identity 2>/dev/null || true
+
+        # NATS
+        nats-server -c /etc/sorabbyngo/nats/nats-server.conf \
+            -l /var/log/sorabbyngo/nats.log &
+        sleep 1
+
+        # Cyberwall (monitor-only on edge)
+        python3 /opt/sorabbyngo/cyberwall/cyberwall_daemon.py \
+            --config /etc/sorabbyngo/cyberwall.yaml \
+            --monitor-only &
+
+        # Byngonet node
+        python3 /opt/sorabbyngo/byngonet/node/byngonet_node.py T3_ARM32 &
+
+        # Chameha (minimal mode)
+        python3 /opt/sorabbyngo/chameha/chameha_service.py &
+
+        echo "[edge-os] Services started."
+        ;;
+    stop)
+        echo "[edge-os] Stopping services..."
+        killall nats-server python3 2>/dev/null || true
+        ;;
+    restart)
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+esac
