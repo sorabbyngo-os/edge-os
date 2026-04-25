@@ -1,66 +1,86 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sorabbyngo-Labs/.github/main/assets/sorabbyngo-logo.jpg" alt="Sorabbyngo" width="480"/>
-</p>
-
-<p align="center">
-  <strong>Edge OS — IoT, Drones, Vehicles & Embedded Systems</strong>
-</p>
-
-<p align="center">
-  Built on Sorabbyngo AI Kernel · Minimal footprint · Real-time · CAN bus
+  <img src="./assets/banner.svg" alt="Edge OS" width="800"/>
 </p>
 
 ---
 
-## What this is
-
-Edge OS is the embedded surface of the Sorabbyngo AI Kernel. It runs on drones, vehicles, smart city nodes, IoT sensors, and robotics platforms.
-
-Every Edge OS device is a Byngonet node — part of the AI mesh.
+The embedded surface of SORABBYNGO OS. Edge OS runs on drones, vehicles, smart city nodes, IoT sensors, and robotics platforms. Every Edge OS device is a Byngonet mesh node — part of the AI mesh even at the edge of the network.
 
 ---
 
-## Key Requirements
+## Boot sequence
 
-| Requirement | Implementation |
+```mermaid
+graph TD
+    BOOT["U-Boot"] --> KERNEL["Linux 6.x-sorabbyngo-edge\nARM64 · PREEMPT_RT · minimal drivers"]
+    KERNEL --> IDENTITY["sorabbyngo-identity.service\nNodeID hardware seal"]
+    IDENTITY --> CW["cyberwall-edge.service\nLightweight monitor-only mode"]
+    CW --> BYNGONET["byngonet-edge.service\nMesh node — WiFi Direct + LoRa"]
+    BYNGONET --> AI["edge-ai.service\nTinyLLM — 256MB RAM cap"]
+    BYNGONET --> DRONE["mavlink-bridge.service\nDrone profile only · FIFO 80"]
+    BYNGONET --> VEHICLE["can-gateway.service\nVehicle profile only · FIFO 60"]
+    AI --> TARGET["edge.target\nOS ready"]
+```
+
+---
+
+## Build profiles
+
+```bash
+# Drone — MAVLink + GPS + IMU
+PROFILE=drone bash scripts/build.sh
+
+# Vehicle — CAN bus + OBD2
+PROFILE=vehicle bash scripts/build.sh
+
+# IoT sensor node — minimal + LoRa
+PROFILE=iot bash scripts/build.sh
+
+# Raspberry Pi
+PROFILE=rpi bash scripts/build.sh
+```
+
+---
+
+## What makes it different
+
+| Feature | How |
 |---|---|
 | Minimal footprint | Target under 50MB rootfs |
-| Real-time control | PREEMPT_RT for actuator control |
-| Vehicle support | CAN bus (SocketCAN) |
-| Drone support | MAVLink protocol |
-| Edge AI | TinyLLM / QLoRA compressed models |
-| Mesh networking | Byngonet node — WiFi Direct + LoRa |
+| Real-time control | PREEMPT_RT — actuator control < 1ms |
+| Drone support | MAVLink bridge — FIFO priority 80 |
+| Vehicle support | SocketCAN — 500kbps CAN bus |
+| Edge AI | TinyLLM — capped at 256MB RAM |
+| Mesh-native | Every device a Byngonet node |
+| Lightweight security | Cyberwall monitor-only — 32MB cap |
 
 ---
 
-## Target Platforms
+## Services
 
-| Platform | Architecture | Status |
+| Service | Role | Memory |
 |---|---|---|
-| Drones | ARM Cortex-A / M | Planned |
-| Vehicles | ARM64 + CAN | Planned |
-| Smart city nodes | x86_64 / ARM64 | Planned |
-| IoT sensors | ARM Cortex-M | Planned |
-| Robotics | ARM64 | Planned |
-| Raspberry Pi | ARM64 | Planned |
+| `cyberwall-edge.service` | Security monitor | 32MB |
+| `byngonet-edge.service` | Mesh node | 64MB |
+| `edge-ai.service` | TinyLLM inference | 256MB |
+| `mavlink-bridge.service` | Drone profile — FIFO 80 | — |
+| `can-gateway.service` | Vehicle profile — FIFO 60 | — |
+| `edge.target` | Default boot target | — |
 
 ---
 
-## Relationship to Sorabbyngo Kernel
-sorabbyngo-os (kernel source)
-└── configs/sorabbyngo_edge_arm_defconfig
-└── edge-os (this repo — minimal rootfs + MAVLink + CAN)
----
+## Part of SORABBYNGO OS
 
-## Related Repositories
-
-| Repo | Role |
+| OS Surface | Role |
 |---|---|
-| [sorabbyngo-os](https://github.com/sorabbyngo-Labs/sorabbyngo-os) | Kernel source |
-| [byngonet](https://github.com/sorabbyngo-Labs/byngonet) | Mesh network protocol |
-| [byngox](https://github.com/sorabbyngo-Labs/byngox) | Edge AI reasoning |
+| [Byngo OS](https://github.com/sorabbyngo-Labs/byngo-os) | Consumer devices |
+| [Novela OS](https://github.com/sorabbyngo-Labs/novela-os) | Medical equipment |
+| **Edge OS** | IoT, drones, vehicles — this repo |
+| [Server OS](https://github.com/sorabbyngo-Labs/server-os) | Infrastructure |
 
 ---
 
-**Sorabbyngo Company** · Kisii, Kenya · 2026
-*Rhythm of Digital Life*
+<p align="center">
+  <strong>Sorabbyngo Company</strong> &nbsp;·&nbsp; Kisii, Kenya &nbsp;·&nbsp; 2026<br/>
+  <em>Rhythm of Digital Life</em>
+</p>

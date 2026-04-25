@@ -1,0 +1,17 @@
+[Unit]
+Description=Edge AI — TinyLLM inference for autonomous decisions
+After=byngonet-edge.service
+Wants=byngonet-edge.service
+
+[Service]
+Type=simple
+ExecStart=/opt/sorabbyngo/bin/edge-ai --model=tinyllm --max-ram=256M
+Restart=on-failure
+RestartSec=10
+User=sorabbyngo
+# Strict memory limit — edge devices have limited RAM
+MemoryMax=256M
+CPUQuota=50%
+
+[Install]
+WantedBy=edge.target

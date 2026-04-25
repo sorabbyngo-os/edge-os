@@ -1,0 +1,18 @@
+[Unit]
+Description=Byngonet Edge Node — mesh networking
+After=network.target sorabbyngo-identity.service
+Requires=sorabbyngo-identity.service
+
+[Service]
+Type=simple
+ExecStart=/opt/sorabbyngo/bin/byngonet --mode=edge --transport=wifi-direct,lora
+Restart=always
+RestartSec=5
+User=root
+Environment=NATS_URL=nats://localhost:4222
+Environment=BYNGONET_ZONE=edge
+# Minimal memory footprint
+MemoryMax=64M
+
+[Install]
+WantedBy=edge.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=CAN Bus Gateway — vehicle network interface
+After=byngonet-edge.service
+ConditionPathExists=/sys/class/net/can0
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/ip link set can0 up type can bitrate 500000
+ExecStart=/opt/sorabbyngo/bin/can-gateway --interface=can0
+ExecStop=/sbin/ip link set can0 down
+User=root
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=60
+
+[Install]
+WantedBy=edge.target

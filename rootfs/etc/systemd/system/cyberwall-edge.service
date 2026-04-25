@@ -1,0 +1,17 @@
+[Unit]
+Description=Cyberwall — Edge OS security (lightweight mode)
+After=network.target sorabbyngo-identity.service
+Before=byngonet-edge.service
+
+[Service]
+Type=simple
+ExecStart=/opt/sorabbyngo/bin/cyberwall --config=/etc/sorabbyngo/cyberwall-edge.yaml --monitor-only
+Restart=always
+RestartSec=5
+User=root
+Environment=CYBERWALL_VARIANT=edge
+# Lightweight on edge — monitor only, no heavy AI
+MemoryMax=32M
+
+[Install]
+WantedBy=edge.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=MAVLink Bridge — drone flight controller interface
+After=byngonet-edge.service
+ConditionPathExists=/dev/ttyACM0
+
+[Service]
+Type=simple
+ExecStart=/opt/sorabbyngo/bin/mavlink-bridge --serial=/dev/ttyACM0 --baud=115200
+Restart=on-failure
+RestartSec=3
+User=root
+# Real-time for flight control
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=80
+
+[Install]
+WantedBy=edge.target
