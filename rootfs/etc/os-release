@@ -1,0 +1,9 @@
+NAME="Edge OS"
+VERSION="1.0.0"
+ID=edge
+ID_LIKE=sorabbyngo
+PRETTY_NAME="Edge OS 1.0.0 (Embedded)"
+HOME_URL="https://github.com/sorabbyngo-Labs/edge-os"
+BUILD_ID=edge-1.0.0
+VARIANT="IoT / Drone / Vehicle"
+VARIANT_ID=embedded

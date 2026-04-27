@@ -1,0 +1,7 @@
+# Edge OS fstab — minimal embedded
+# <device>      <mount>  <type>   <options>                    <dump> <pass>
+/dev/mmcblk0p1  /boot    vfat     ro,noatime                   0      2
+/dev/mmcblk0p2  /        squashfs ro                           0      1
+tmpfs           /tmp     tmpfs    rw,nosuid,size=64M           0      0
+tmpfs           /run     tmpfs    rw,nosuid,nodev,size=32M     0      0
+tmpfs           /var/log tmpfs    rw,nosuid,nodev,size=16M     0      0
