@@ -73,10 +73,10 @@ PROFILE=rpi bash scripts/build.sh
 
 | OS Surface | Role |
 |---|---|
-| [Byngo OS](https://github.com/sorabbyngo-Labs/byngo-os) | Consumer devices |
-| [Novela OS](https://github.com/sorabbyngo-Labs/novela-os) | Medical equipment |
+| [Byngo OS](https://github.com/sorabbyngo-os/byngo-os) | Consumer devices |
+| [Novela OS](https://github.com/sorabbyngo-os/novela-os) | Medical equipment |
 | **Edge OS** | IoT, drones, vehicles — this repo |
-| [Server OS](https://github.com/sorabbyngo-Labs/server-os) | Infrastructure |
+| [Server OS](https://github.com/sorabbyngo-os/server-os) | Infrastructure |
 
 ---
 
